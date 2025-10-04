@@ -26,7 +26,6 @@ jobs:
           - build: nightly
             os: ubuntu-22.04
             rust: nightly
-            features: 'unstable'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3

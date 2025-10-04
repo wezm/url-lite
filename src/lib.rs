@@ -9,8 +9,6 @@ Port of the URL parser from
 ```rust
 use url_lite::{Url, ParseError};
 
-// Note that ParseError doesn't implement the Error trait unless the `unstable`
-// feature is enabled
 assert!(Url::parse("not-an-url") == Err(ParseError::Invalid))
 ```
 
@@ -31,11 +29,6 @@ assert_eq!(url.fragment, Some("zzz"));
 assert_eq!(url.userinfo, Some("usr:pass"));
 ```
 
-# Feature: `unstable`
-
-Implements [`core::error::Error`] for [`ParseError`]. Requires nightly due to
-[`error_in_core`](https://doc.rust-lang.org/unstable-book/library-features/error-in-core.html)
-
 # Caveats
 
 Although this is a port of the URL parser from http-parser and it passes all
@@ -49,7 +42,6 @@ If you need a robust URL parser and are okay with std/alloc dependency, use
 
 #![forbid(unsafe_code)]
 #![cfg_attr(not(test), no_std)]
-#![cfg_attr(feature = "unstable", feature(error_in_core))]
 
 use core::fmt;
 
@@ -80,7 +72,6 @@ impl fmt::Display for ParseError {
     }
 }
 
-#[cfg(feature = "unstable")]
 impl core::error::Error for ParseError {}
 
 #[derive(Debug, PartialEq, Eq)]
@@ -149,7 +140,7 @@ impl<'a> Url<'a> {
 }
 
 #[cfg_attr(feature = "_nopanic", no_panic::no_panic)]
-fn parse_url(buf: &str, is_connect: bool) -> Result<Url, ParseError> {
+fn parse_url(buf: &'_ str, is_connect: bool) -> Result<Url<'_>, ParseError> {
     if buf.is_empty() {
         return Err(ParseError::EmptyInput);
     }
@@ -353,7 +344,7 @@ fn parse_url(buf: &str, is_connect: bool) -> Result<Url, ParseError> {
 #[cfg_attr(feature = "_nopanic", no_panic::no_panic)]
 fn set_url_field<'a>(
     uf: &UrlFields,
-    mut url: &mut Url<'a>,
+    url: &mut Url<'a>,
     value: Option<&'a str>,
 ) {
     match uf {

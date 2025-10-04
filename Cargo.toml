@@ -18,8 +18,7 @@ alloc_counter = "0.0.4"
 no-panic = "0.1.19"
 
 [features]
-# Provide core::error::Error implementation
-# Requires nightly and the `error_in_core` feature gate
+# No longer needed; kept for backwards compatibility
 unstable = []
 
 # Internal, used for testing absence of panics

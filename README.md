@@ -20,8 +20,6 @@ cargo add url_lite
 ```rust
 use url_lite::{Url, ParseError};
 
-// Note that ParseError doesn't implement the Error trait unless the `unstable`
-// feature is enabled
 assert!(Url::parse("not-an-url") == Err(ParseError::Invalid))
 
 let input = "https://usr:pass@example.com:8080/some%20path?foo=bar#zzz";
@@ -35,13 +33,6 @@ assert_eq!(url.query, Some("foo=bar"));
 assert_eq!(url.fragment, Some("zzz"));
 assert_eq!(url.userinfo, Some("usr:pass"));
 ```
-
-## Features
-
-- `unstable` - Implements
-  [`core::error::Error`](https://doc.rust-lang.org/core/error/trait.Error.html)
-  for `ParseError`. Requires nightly due to
-  [error_in_core](https://doc.rust-lang.org/unstable-book/library-features/error-in-core.html)
 
 ## Caveats
 
